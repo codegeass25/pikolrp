@@ -1,0 +1,153 @@
+<!doctype html>
+<html lang="en" data-theme="dark">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover" />
+<meta name="robots" content="noindex" />
+<title>PIKOL Scorer — Assigned Matches &amp; Live Scoring</title>
+<meta name="theme-color" content="#0f3d32" />
+<meta name="apple-mobile-web-app-capable" content="yes" />
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+<meta name="apple-mobile-web-app-title" content="PIKOL Scorer" />
+<link rel="manifest" href="scoring-manifest.json?v=73" />
+<link rel="apple-touch-icon" href="icons/wenjelly-v73-apple.png" />
+<link rel="icon" href="icons/wenjelly-v73-192.png" />
+<script src="config.js"></script>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet" />
+<link rel="stylesheet" href="styles.css" />
+<link rel="stylesheet" href="tournament-premium.css?v=67" />
+<link rel="stylesheet" href="scoring-premium.css?v=67" />
+<script src="tournament-view.js"></script>
+<script src="tournament-premium.js?v=74-system-audit"></script>
+<script src="scoring-premium.js?v=75-mobile-fit"></script>
+<link rel="stylesheet" href="mobile-fit.css?v=75-mobile-fit" />
+</head>
+<body class="scoring-page">
+<nav class="sc-app-bar" aria-label="Scorer app navigation"><a class="sc-exit" id="back" href="index.html">← Home</a><span>PIKOL Scorer</span><button class="sc-install" type="button" id="sc-install">Install App</button></nav>
+<p id="sc-install-help" class="sc-install-help" hidden role="status"></p>
+<div id="app" class="score-shell hidden">
+ <nav class="score-nav" aria-label="Scoring navigation"><a href="index.html"><img id="sc-brand" src="icons/wenjelly-v73-192.png" alt="PIKOL club logo"></a><a href="index.html">⌂ <span>Home</span></a><a href="index.html">▣ <span>Events &amp; Registrations</span></a><a href="scoring.html" class="is-active">♜ <span>My Matches</span></a><a href="admin.html">⚙ <span>Administration</span></a><div class="tp-slogan">Play<br><i>Compete</i><br>Belong<span></span></div></nav>
+ <div class="score-main">
+  <header class="score-top"><div><span class="score-kicker">Court-side match console</span><span class="live-pill"><span class="live-dot" id="conn-dot"></span><span id="conn-text">CONNECTING</span></span></div><div class="score-toolbar"><span id="scorer-identity"></span><button class="btn btn-outline btn-sm" id="display">Display mode</button><button class="btn btn-outline btn-sm" id="sc-fullscreen" aria-label="Toggle fullscreen">⛶</button></div></header>
+  <div class="score-heading"><div><div class="score-title" id="tournament">Tournament</div><div id="match-title">Live Match Scoring</div></div><span class="badge" id="status">Scheduled</span></div>
+  <div class="match-meta" id="meta"></div>
+  <div class="score-layout">
+   <main class="arena">
+    <section class="scoreboard" aria-label="Match scoreboard">
+     <article class="competitor side-a" id="competitor-a"><div class="seed" id="seed-a"></div><div class="sc-players" id="players-a"></div><div class="team-name" id="team-a">TBA</div></article>
+     <div class="score-center"><div class="sc-game-state" id="sc-game-state">OFFICIAL MATCH SCORE</div><div class="sc-numbers" role="status" aria-live="polite" aria-atomic="true"><div class="score-box score-box-a"><span class="sc-serve-ball hidden" id="serve-a" aria-label="Side A serving">●</span><div class="score-num" id="score-a">0</div></div><div class="score-box score-box-b"><span class="sc-serve-ball hidden" id="serve-b" aria-label="Side B serving">●</span><div class="score-num" id="score-b">0</div></div></div><div class="sc-serving" id="sc-serving">Serving side not set</div><div class="sc-team-colors"><span></span><span></span></div><div class="sc-score-mode">Official score · Result confirmation advances the draw</div></div>
+     <article class="competitor side-b" id="competitor-b"><div class="seed" id="seed-b"></div><div class="sc-players" id="players-b"></div><div class="team-name" id="team-b">TBA</div></article>
+    </section>
+    <div class="sc-point-controls"><div class="sc-points side-a"><button class="sc-minus" id="minus-a" aria-label="Subtract one point from side A">−1</button><button class="point-btn" id="point-a" aria-label="Add one point to side A">+1</button><small id="control-a-label">Side A</small></div><div class="sc-utility"><button class="btn btn-outline" id="undo">↶<span>Undo</span></button><button class="btn btn-outline" id="sc-timeout">Ⅱ<span>Timeout</span></button><button class="btn btn-outline" id="sc-switch">⇄<span>Switch Sides</span></button></div><div class="sc-points side-b"><button class="point-btn" id="point-b" aria-label="Add one point to side B">+1</button><button class="sc-minus" id="minus-b" aria-label="Subtract one point from side B">−1</button><small id="control-b-label">Side B</small></div></div>
+    <div class="sc-session-strip"><div><span class="sc-yellow">⚑</span><span><strong id="sc-progress">Waiting to start</strong><small id="sc-elapsed">Elapsed 00:00</small></span></div><div class="score-actions"><button class="btn btn-primary hidden" id="reconnect">Resume scoring session</button><button class="btn btn-primary" id="start">Start Match</button><button class="btn btn-outline" id="pause">Pause</button><button class="btn btn-outline hidden" id="resume">Resume</button><button class="btn btn-success" id="finish">✓ Confirm Result</button></div></div>
+    <div class="sc-serve-controls"><span>Serving side</span><button class="btn btn-outline btn-sm" id="set-serve-a">Side A</button><button class="btn btn-outline btn-sm" id="set-serve-b">Side B</button><span id="sc-write-state"></span></div>
+    <div class="sc-lower"><section class="score-history-panel tp-surface"><div class="side-head"><h2>Match Timeline</h2><small>Latest 100 audit events</small></div><div class="history" id="history"></div></section><section class="sc-public-preview tp-surface"><div class="side-head"><h2>Public Scoreboard</h2><button class="tp-btn tp-outline" id="sc-share">Share Live Score</button></div><a id="sc-public-link" target="_blank" rel="noopener"><img src="assets/booking/hero-court.jpg" alt="Pickleball court promotional illustration"><div id="sc-preview-score"></div><span>Open spectator display ↗</span></a></section></div>
+   </main>
+   <aside class="score-side tp-surface"><nav class="sc-side-tabs"><button class="is-active" id="sc-info-tab" aria-pressed="true">Match Info</button><button id="sc-queue-tab" aria-pressed="false">Court Queue</button></nav><div id="sc-info"></div><div id="sc-court-queue"></div></aside>
+  </div>
+ </div>
+</div>
+<div id="login-panel" class="scorer-panel hidden">
+  <div class="score-kicker">Restricted court-side access</div><h2 style="margin:6px 0 4px">Scorer sign in</h2>
+  <p style="color:#94a79f;margin:0 0 18px">Use the scorer account created by the tournament administrator.</p>
+  <form id="scorer-login"><div class="scorer-login-grid"><div><label class="label">Email</label><input class="input" id="login-email" type="email" autocomplete="username" required></div><div><label class="label">Password</label><input class="input" id="login-password" type="password" autocomplete="current-password" required></div></div><button class="btn btn-primary" style="width:100%;margin-top:14px" type="submit">Sign in</button></form>
+</div>
+<div id="assigned-panel" class="scorer-panel hidden"><div class="row wrap" style="justify-content:space-between;align-items:center"><div><div class="score-kicker">Court-side console</div><h2 style="margin:6px 0 2px">Assigned matches</h2><div id="assigned-user" style="color:#94a79f"></div></div><button class="btn btn-outline btn-sm" id="scorer-signout">Sign out</button></div><p id="assigned-freshness" class="sc-freshness" role="status" aria-live="polite">Loading your matches…</p><div id="assigned-summary" class="sc-assigned-summary"></div><div id="assigned-list" class="assigned-list"></div></div>
+<div id="error" class="auth-error hidden"><h2>Scoring console unavailable</h2><p class="muted" id="error-text"></p><button class="btn btn-primary" id="error-back">Back to assigned matches</button> <button class="btn btn-outline" id="error-login">Sign in again</button></div>
+<div class="score-toast" id="toast"></div>
+<script>
+(function(){'use strict';
+  var API=(window.PIKOL_API_BASE||'').replace(/\/+$/,'');
+  /* Scoring/Admin credentials are session scoped. Purge pre-upgrade persistent
+     copies so closing the browser/PWA actually removes the staff credential. */
+  try { localStorage.removeItem('pb_scoring_token'); localStorage.removeItem('pb_admin_token'); } catch (_) {}
+  var TOKEN_KEY=sessionStorage.getItem('pb_admin_token')?'pb_admin_token':'pb_scoring_token';
+  var TOKEN=sessionStorage.getItem(TOKEN_KEY)||'';
+  var params=new URLSearchParams(location.search), MATCH_ID=params.get('match');
+  var PUBLIC_DISPLAY=params.get('display')==='1';if(PUBLIC_DISPLAY)document.body.classList.add('display-mode','public-display');
+  var data=null,busy=false,pollTimer=null,heartbeatTimer=null,LOCK_TOKEN='',ME=null,connected=false,loadVersion=0,pendingLoads=0,assignedPending=false,facilityToday='';
+  function $(q){return document.querySelector(q)}
+  function esc(v){return String(v==null?'':v).replace(/[&<>"']/g,function(c){return({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'})[c]})}
+  function toast(t){var e=$('#toast');e.textContent=t;e.classList.add('show');setTimeout(function(){e.classList.remove('show')},1800)}
+  function hidePanels(){['#app','#login-panel','#assigned-panel','#error'].forEach(function(q){$(q).classList.add('hidden')})}
+  async function api(path,opt){opt=opt||{};var requestToken=TOKEN;var headers=Object.assign({'Content-Type':'application/json'},opt.headers||{});if(TOKEN&&!PUBLIC_DISPLAY)headers.Authorization='Bearer '+TOKEN;if(LOCK_TOKEN&&!PUBLIC_DISPLAY)headers['X-Scoring-Session']=LOCK_TOKEN;var r=await fetch(API+path,{method:opt.method||'GET',headers:headers,body:opt.body?JSON.stringify(opt.body):undefined,keepalive:!!opt.keepalive,cache:'no-store'});if(path==='/api/scoring/assigned')facilityToday=r.headers.get('X-Facility-Date')||'';var d=await r.json().catch(function(){return{}});if(requestToken!==TOKEN){var stale=new Error('Your session changed. Please try again.');stale.stale=true;throw stale}if(!r.ok){var error=new Error(d.error||d.message||('HTTP '+r.status));error.status=r.status;throw error}return d}
+  function fail(msg){hidePanels();$('#error-text').textContent=msg;$('#error').classList.remove('hidden')}
+  function label(v){return String(v||'').replace(/_/g,' ').replace(/\b\w/g,function(c){return c.toUpperCase()})}
+  function fmtDate(v){if(!v)return'TBA';var d=new Date(v+'T00:00:00');return d.toLocaleDateString(undefined,{month:'short',day:'numeric',year:'numeric'})}
+  function fmtTime(v){if(!v)return'TBA';var p=String(v).split(':'),h=Number(p[0]),ap=h>=12?'PM':'AM';return((h%12)||12)+':'+p[1]+' '+ap}
+  function updateExit(){
+    var exit=$('#back'),role=ME&&ME.role;
+    exit.textContent=role==='admin'?'← Admin Home':role==='scorer'?'← Scorer Matches':'← Home';
+    exit.href=role==='admin'?'admin.html?push_page=tournaments'+(data&&data.match?'&tournament='+encodeURIComponent(data.match.tournament_id):''):role==='scorer'?'scoring.html':'index.html';
+  }
+  async function publicIdentity(){
+    // Public match requests stay anonymous. Identify the local session solely for the exit destination.
+    if(!TOKEN)return;
+    try{var r=await fetch(API+'/api/auth/me',{headers:{Authorization:'Bearer '+TOKEN},cache:'no-store'});if(r.ok)ME=(await r.json()).user;}catch(_){}
+    updateExit();
+  }
+  function stopTimers(){clearInterval(pollTimer);clearInterval(heartbeatTimer);pollTimer=null;heartbeatTimer=null;}
+  function showLogin(message){stopTimers();++loadVersion;LOCK_TOKEN='';connected=false;data=null;hidePanels();$('#login-panel').classList.remove('hidden');if(message)toast(message);}
+  function expireSession(){if(sessionStorage.getItem(TOKEN_KEY)===TOKEN)sessionStorage.removeItem(TOKEN_KEY);TOKEN='';ME=null;updateExit();showLogin('Your session expired. Sign in to continue.');}
+  function render(){if(!data)return;var m=data.match,d=data.division||{};
+    $('#tournament').textContent=m.tournament_name||'Tournament';
+    $('#match-title').textContent=(m.division_name||d.name||'Division')+' · '+label(m.round)+' · Match '+(m.match_number||m.id);
+    $('#team-a').textContent=m.team_a_name||'TBA';$('#team-b').textContent=m.team_b_name||'TBA';
+    $('#seed-a').textContent=m.team_a_seed?'Seed #'+m.team_a_seed:'';$('#seed-b').textContent=m.team_b_seed?'Seed #'+m.team_b_seed:'';
+    $('#score-a').textContent=Number(m.score_a||0);$('#score-b').textContent=Number(m.score_b||0);
+    $('#status').textContent=label(m.status);$('#status').className='badge '+(m.status==='completed'?'badge-completed':m.status==='live'?'badge-approved':'badge-pending');
+    $('#meta').innerHTML=['Format: '+label(d.competition_format),'Stage: '+label(m.stage||m.bracket_side),'Court: '+(m.court_name||'TBA'),'Date: '+fmtDate(m.scheduled_date),'Time: '+fmtTime(m.scheduled_time),m.scorer_name?'Scorer: '+m.scorer_name:''].filter(Boolean).map(function(x){return'<span class="meta-chip">'+esc(x)+'</span>'}).join('');
+    var active=['scheduled','ready','live','postponed'].includes(m.status),hasTeams=m.team_a_id&&m.team_b_id&&Number(m.team_a_id)!==Number(m.team_b_id);
+    var canControl=active&&hasTeams&&!!LOCK_TOKEN&&connected&&!busy,canScore=canControl&&m.status==='live';
+    $('#point-a').disabled=!canScore||Number(m.score_a||0)>=999;$('#point-b').disabled=!canScore||Number(m.score_b||0)>=999;
+    $('#undo').disabled=!canScore;$('#finish').disabled=!canScore;$('#pause').disabled=!canScore;$('#resume').disabled=!canControl||m.status!=='ready';$('#start').disabled=!canControl||!['scheduled','postponed'].includes(m.status);
+    $('#start').classList.toggle('hidden',!['scheduled','postponed'].includes(m.status));$('#pause').classList.toggle('hidden',m.status!=='live');$('#resume').classList.toggle('hidden',m.status!=='ready');
+    $('#reconnect').classList.toggle('hidden',!active||!!LOCK_TOKEN);$('#reconnect').disabled=busy||!connected;
+    updateExit();
+    $('#conn-text').textContent=!connected?'RECONNECTING':PUBLIC_DISPLAY?'LIVE FEED':LOCK_TOKEN?'SYNCED':'VIEW ONLY';$('#conn-dot').style.background=connected&&LOCK_TOKEN?'#59d49e':'#e6bb63';
+    window.PikolScoring.render(data,{me:ME,canControl:canControl,canScore:canScore,connected:connected,publicDisplay:PUBLIC_DISPLAY});
+  }
+  async function load(silent){var version=++loadVersion;pendingLoads++;try{var next=await api((PUBLIC_DISPLAY?'/api/public/tournament-matches/':'/api/scoring/matches/')+MATCH_ID);if(version!==loadVersion)return false;data=next;connected=true;render();hidePanels();$('#app').classList.remove('hidden');return true}catch(e){if(version!==loadVersion)return false;connected=false;render();if(e.status===401){expireSession();return false}if(!silent)fail(e.message);return false}finally{pendingLoads--;}}
+  async function acquire(){var r=await api('/api/scoring/matches/'+MATCH_ID+'/acquire',{method:'POST',body:{}});LOCK_TOKEN=r.session_token||'';}
+  async function action(a,body){if(busy||!LOCK_TOKEN||!connected||!data)return;busy=true;++loadVersion;render();try{var m=data.match,payload=Object.assign({action:a,score_a:Number(m.score_a||0),score_b:Number(m.score_b||0)},body||{});var saved=await api('/api/scoring/matches/'+MATCH_ID+'/action',{method:'POST',body:payload});if(data&&saved&&saved.id)data.match=Object.assign({},data.match,saved);if(a==='complete'){await api('/api/scoring/matches/'+MATCH_ID+'/release',{method:'POST',body:{}}).catch(function(){});LOCK_TOKEN=''}if(a==='complete'){location.assign('scoring.html');return;}await load(true);toast(label(a)+' saved')}catch(e){if(e.stale)return;if(e.status===401)expireSession();else if(e.status===409){LOCK_TOKEN='';await load(true)}else if(!e.status){connected=false}toast(e.message)}finally{busy=false;render()}}
+  async function showAssigned(silent){
+    if(assignedPending||!TOKEN||PUBLIC_DISPLAY)return;
+    assignedPending=true;
+    try{var rows=await api('/api/scoring/assigned');
+      $('#assigned-user').textContent=(ME&&ME.full_name?ME.full_name+' · ':'')+label(ME&&ME.role);
+      window.PikolScoring.assigned(rows,facilityToday);
+      $('#assigned-freshness').textContent='Updated '+new Date().toLocaleTimeString(undefined,{hour:'2-digit',minute:'2-digit'})+' · refreshes automatically';
+      if(!silent){hidePanels();$('#assigned-panel').classList.remove('hidden');}
+      updateExit();
+    }catch(e){if(e.stale)return;if(e.status===401)expireSession();else if(e.status===403)showLogin(e.message);else if(silent)$('#assigned-freshness').textContent='Connection unavailable · showing the last update. Retrying automatically.';else fail(e.message);}
+    finally{assignedPending=false;}
+  }
+  async function heartbeat(){if(!LOCK_TOKEN||busy)return;var session=LOCK_TOKEN;try{await api('/api/scoring/matches/'+MATCH_ID+'/heartbeat',{method:'POST',body:{}})}catch(e){if(e.stale||session!==LOCK_TOKEN)return;if(e.status===401){expireSession();return}if(e.status===409||e.status===403)LOCK_TOKEN='';connected=false}render()}
+  function startTimers(){stopTimers();heartbeatTimer=setInterval(heartbeat,15000);pollTimer=setInterval(function(){if(!busy&&!pendingLoads)load(true)},3500)}
+  async function boot(){stopTimers();if(PUBLIC_DISPLAY){if(!MATCH_ID)return fail('Select a match to view its scoreboard.');publicIdentity();await load(false);pollTimer=setInterval(function(){if(!pendingLoads&&!document.hidden)load(true)},3500);return;}if(!TOKEN){showLogin();return}try{var me=await api('/api/auth/me');ME=me.user;updateExit();if(!['admin','scorer'].includes(ME.role)){showLogin('This account does not have scoring access.');return}if(!MATCH_ID){await showAssigned();if(TOKEN)pollTimer=setInterval(function(){if(!document.hidden)showAssigned(true)},5000);return;}if(!await load(false))return;if(data&&data.match&&!['completed','cancelled'].includes(data.match.status)){try{await acquire();await load(true)}catch(e){toast(e.message);LOCK_TOKEN='';if(e.status===401){expireSession();return}await load(true)}}if(TOKEN)startTimers()}catch(e){if(e.status===401)expireSession();else fail(e.message)}}
+  $('#scorer-login').onsubmit=async function(e){e.preventDefault();if(busy)return;busy=true;try{var r=await api('/api/auth/login',{method:'POST',body:{email:$('#login-email').value.trim(),password:$('#login-password').value}});if(!['admin','scorer'].includes(r.user.role))throw new Error('This account does not have scoring access.');TOKEN=r.token;TOKEN_KEY='pb_scoring_token';ME=r.user;sessionStorage.setItem(TOKEN_KEY,TOKEN);$('#login-password').value='';await boot()}catch(err){toast(err.message)}finally{busy=false;render()}};
+  $('#assigned-list').onclick=function(e){var b=e.target.closest('[data-open-match]');if(b)location.href='scoring.html?match='+encodeURIComponent(b.dataset.openMatch)};
+  $('#scorer-signout').onclick=function(){if(TOKEN)api('/api/auth/logout',{method:'POST',body:{}}).catch(function(){});['pb_scoring_token','pb_admin_token'].forEach(function(key){if(sessionStorage.getItem(key)===TOKEN)sessionStorage.removeItem(key);try{localStorage.removeItem(key)}catch(_){}});TOKEN='';ME=null;location.href='scoring.html'};
+  $('#error-back').onclick=function(){location.href='scoring.html'};
+  $('#error-login').onclick=function(){showLogin()};
+  $('#reconnect').onclick=async function(){if(busy||!connected)return;busy=true;render();try{await acquire();await load(true)}catch(e){if(e.status===401)expireSession();toast(e.message)}finally{busy=false;render()}};
+  $('#point-a').onclick=function(){action('score',{score_a:Number(data.match.score_a||0)+1})};$('#point-b').onclick=function(){action('score',{score_b:Number(data.match.score_b||0)+1})};
+  $('#minus-a').onclick=function(){if(data&&Number(data.match.score_a)>0)action('score',{score_a:Number(data.match.score_a)-1})};
+  $('#minus-b').onclick=function(){if(data&&Number(data.match.score_b)>0)action('score',{score_b:Number(data.match.score_b)-1})};
+  async function presentation(actionName,side){if(busy||!LOCK_TOKEN||!connected)return;busy=true;++loadVersion;render();try{await api('/api/scoring/matches/'+MATCH_ID+'/presentation',{method:'POST',body:{action:actionName,side:side}});await load(true);}catch(e){if(e.status===401)expireSession();else if(e.status===409)LOCK_TOKEN='';else if(!e.status)connected=false;toast(e.message);}finally{busy=false;render();}}
+  $('#sc-switch').onclick=function(){presentation('switch_sides')};$('#sc-timeout').onclick=function(){presentation('timeout')};
+  $('#set-serve-a').onclick=function(){presentation('serve','a')};$('#set-serve-b').onclick=function(){presentation('serve','b')};
+  $('#undo').onclick=function(){action('undo')};$('#start').onclick=function(){action('start')};$('#pause').onclick=function(){action('pause')};$('#resume').onclick=function(){action('resume')};
+  $('#finish').onclick=function(){if(!data)return;var m=data.match;if(Number(m.score_a||0)===Number(m.score_b||0))return toast('Final score cannot be tied.');if(confirm('Confirm final result '+m.score_a+'–'+m.score_b+'? This will advance the tournament bracket/standings.'))action('complete')};
+  $('#display').onclick=function(){document.body.classList.toggle('display-mode');this.textContent=document.body.classList.contains('display-mode')?'Exit display':'Display mode'};
+  async function refreshVisible(){if(document.hidden)return;if(!MATCH_ID){if(TOKEN&&ME)await showAssigned(true);}else {if(!PUBLIC_DISPLAY)await heartbeat();if(!busy&&!pendingLoads)await load(true);}}
+  window.addEventListener('focus',refreshVisible);window.addEventListener('pageshow',refreshVisible);document.addEventListener('visibilitychange',refreshVisible);
+  window.addEventListener('beforeunload',function(){clearInterval(pollTimer);clearInterval(heartbeatTimer);if(LOCK_TOKEN&&MATCH_ID){api('/api/scoring/matches/'+MATCH_ID+'/release',{method:'POST',body:{},keepalive:true}).catch(function(){})}});
+  window.PikolScoring.bind({matchId:MATCH_ID,toast:toast});
+  boot();
+})();
+</script>
+</body>
+</html>

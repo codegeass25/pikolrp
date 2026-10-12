@@ -1,0 +1,32 @@
+/* Original PIKOL eSports rank ceremony. No external visual dependencies. */
+.pr-rank-card{background:linear-gradient(140deg,#081b24,#0a101c 70%);color:#f8fbff;border:1px solid #305b60;border-radius:18px;padding:20px;overflow:hidden;position:relative}
+.pr-rank-card:before{content:'';position:absolute;inset:-70%;background:radial-gradient(circle,#1ed8b922,transparent 45%);animation:pr-ambient 8s linear infinite;pointer-events:none}
+.pr-rank-head{display:flex;align-items:center;gap:16px;position:relative}.pr-rank-head img{width:88px;height:100px;object-fit:contain;filter:drop-shadow(0 0 12px #17dfc688)}
+.pr-rank-title{font-weight:900;letter-spacing:.14em;font-size:1rem}.pr-rank-numeral{font-weight:900;font-size:2rem;line-height:1.2;font-variant-numeric:tabular-nums}
+.pr-rank-progress{height:9px;background:#ffffff22;border-radius:40px;overflow:hidden;margin:17px 0 7px}.pr-rank-progress>div{height:100%;background:linear-gradient(90deg,#08ad90,#58faff);border-radius:inherit;transition:width 1.4s ease}
+.pr-rank-stats{display:flex;gap:8px;flex-wrap:wrap;color:#b9d8e0;font-size:.8rem}
+.pr-rank-history{width:100%;border-collapse:collapse;font-size:.85rem}.pr-rank-history td{padding:8px 4px;border-bottom:1px solid #7892a22f}.pr-rank-history .plus{color:#1edcaa}.pr-rank-history .minus{color:#ed718c}
+.pr-ceremony{position:fixed;inset:0;z-index:2147483646;background:radial-gradient(ellipse at 50% 50%,#11282e 0%,#02070b 72%);display:grid;place-items:center;overflow:hidden;color:#fff;isolation:isolate}
+.pr-ceremony[hidden]{display:none!important}.pr-ceremony:before{content:'';position:absolute;inset:-65%;background:repeating-conic-gradient(from 0deg,#55ffdb00 0 19deg,#7affd114 22deg,#56bbff00 29deg);animation:pr-rays 12s linear infinite;pointer-events:none}
+.pr-ceremony:after{content:'';position:absolute;inset:0;background-image:linear-gradient(#25dcb90b 1px,transparent 1px),linear-gradient(90deg,#25dcb90b 1px,transparent 1px);background-size:45px 45px;mask-image:linear-gradient(transparent,#000,transparent);pointer-events:none}
+.pr-ceremony-body{position:relative;z-index:3;display:flex;flex-direction:column;align-items:center;text-align:center;width:min(96vw,620px);padding:26px;gap:8px}
+.pr-eyebrow{font-size:.72rem;letter-spacing:.38em;color:#79e4d7;font-weight:800;text-transform:uppercase}
+.pr-stage-title{font-weight:1000;font-size:clamp(2rem,8vw,4.5rem);letter-spacing:.11em;text-shadow:0 0 25px #51ffe6a5;margin:0;animation:pr-title-in .6s ease both}
+.pr-emblem-frame{position:relative;width:clamp(160px,42vw,290px);height:clamp(190px,48vw,330px);display:grid;place-items:center;perspective:700px}
+.pr-emblem-halo{position:absolute;inset:8%;border:2px solid #70fff05a;border-radius:50%;box-shadow:0 0 80px 25px #26ffc744,0 0 15px #66ffd8 inset;animation:pr-halo 3s ease-in-out infinite;transition:transform 1s}
+.pr-emblem{position:absolute;inset:0;width:100%;height:100%;object-fit:contain;filter:drop-shadow(0 12px 20px #000) drop-shadow(0 0 23px #34ffe697);transition:transform .9s cubic-bezier(.17,.85,.18,1),opacity .5s,filter .7s;animation:none}
+.pr-emblem.prev{opacity:1}.pr-emblem.next{opacity:0;transform:scale(.16) rotateY(90deg)}
+.pr-ceremony.promote .pr-emblem.prev{opacity:0;transform:scale(1.8) rotateY(-95deg);filter:brightness(4) blur(8px)}
+.pr-ceremony.promote .pr-emblem.next{opacity:1;transform:scale(1) rotateY(0);filter:drop-shadow(0 0 22px #aafaff) drop-shadow(0 0 45px #91ffff)}
+.pr-impact{position:absolute;width:6px;height:6px;border:4px solid #b6fffc;border-radius:50%;opacity:0;pointer-events:none;box-shadow:0 0 40px 14px #7cffe5}
+.pr-ceremony.promote .pr-impact{animation:pr-impact .95s ease-out forwards}
+.pr-particle{position:absolute;top:50%;left:50%;width:var(--size,5px);height:var(--size,5px);background:var(--tone,#64ffee);border-radius:50%;box-shadow:0 0 13px var(--tone,#64ffee);opacity:0;pointer-events:none;z-index:2}
+.pr-ceremony.promote .pr-particle{animation:pr-particle var(--duration,1.65s) var(--delay,0s) ease-out forwards}
+.pr-rp-count{font-weight:900;font-size:clamp(1.1rem,5vw,2rem);font-variant-numeric:tabular-nums}
+.pr-ceremony-controls{display:flex;gap:9px;justify-content:center;flex-wrap:wrap;margin-top:15px}
+.pr-ceremony-btn{min-height:44px;border-radius:50px;padding:10px 19px;color:#f8ffff;background:#113c46;border:1px solid #4cb9b8;font-weight:800;cursor:pointer}.pr-ceremony-btn.primary{background:linear-gradient(105deg,#0eaa83,#34cfbf);color:#04191a;border:0}
+.pr-from-to{font-size:.9rem;color:#afcdd3;letter-spacing:.1em}.pr-subline{font-size:.85rem;color:#d2e2eb}
+@keyframes pr-float{50%{transform:translateY(-8px)}}@keyframes pr-ambient{50%{transform:rotate(180deg)}}@keyframes pr-rays{to{transform:rotate(360deg)}}@keyframes pr-halo{50%{transform:scale(1.07);opacity:.6}}@keyframes pr-title-in{from{opacity:0;transform:translateY(20px) scale(.8)}to{opacity:1;transform:none}}@keyframes pr-impact{10%{opacity:1}100%{opacity:0;transform:scale(85)}}@keyframes pr-particle{5%{opacity:1}100%{opacity:0;transform:translate(var(--x),var(--y)) scale(.1)}}
+@media(prefers-reduced-motion:reduce){.pr-ceremony *,.pr-rank-card *{animation:none!important;transition:none!important}.pr-ceremony .pr-emblem.prev{opacity:0}.pr-ceremony .pr-emblem.next{opacity:1;transform:none}.pr-particle{display:none}}
+
+.pr-emblem-frame{animation:pr-float 3s ease-in-out infinite}
